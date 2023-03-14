@@ -1,0 +1,15 @@
+.btn {
+  font-size: 1.5rem;
+  outline: none;
+  border: none;
+  padding: 15px 50px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  background-color: #1097ef;
+  color: white;
+}
+
+.btn:hover {
+  background-color: #0E86D4;
+}

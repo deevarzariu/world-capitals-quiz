@@ -13,12 +13,13 @@
   cursor: pointer;
   padding: 15px 10px;
   width: 100%;
-  margin-bottom: 20px;
+  margin: 0 auto 20px;
   border-radius: 5px;
   font-weight: 600;
   font-size: 1.2rem;
   background-color: #afdcfa;
   border: none;
+  max-width: 1000px;
 }
 
 .question-option:hover {

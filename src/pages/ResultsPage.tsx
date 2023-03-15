@@ -10,6 +10,7 @@ import { selectRandomCountries } from "../services/country";
 import { convertCountryToOption } from "../utils/helpers";
 
 import Button from "../components/Button";
+import "../assets/styles/ResultsPage.css";
 
 function ResultsPage() {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ function ResultsPage() {
 
   const { resetPage } = usePagination(NB_PAGES, ITEMS_PER_PAGE, options);
 
-  const result = useSelector(selectScore);
+  const score = useSelector(selectScore);
 
   function restart() {
     dispatch(resetScore());
@@ -32,7 +33,9 @@ function ResultsPage() {
 
   return (
     <div className="page">
-      <div>Your Results Here: {result}</div>
+      <div className="result-text">
+        Congratulations, you got {score} out of {NB_PAGES} correct.
+      </div>
       <Button onClick={restart}>Try Again</Button>
     </div>
   );

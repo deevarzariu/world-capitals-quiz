@@ -16,6 +16,11 @@ export function generateRandomNumArr(length: number, max: number) {
   return numbers;
 }
 
+export function getRandomOption(options: Option[]) {
+  const index = generateRandomNum(options.length);
+  return options.find((_, idx) => idx === index);
+}
+
 export function convertCountryToOption(country: Country): Option {
   return {
     country: country.name.common,

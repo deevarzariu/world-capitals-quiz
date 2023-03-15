@@ -19,23 +19,15 @@ export const selectCountriesResult = countryApi.endpoints.getCountries.select();
 
 const selectCountriesData = createSelector(
   selectCountriesResult,
-  (countriesResult) => countriesResult.data
+  (countriesResult) =>
+    countriesResult.data?.filter((country) => country.capital.length)
 );
 
 export const selectRandomCountries = createSelector(
   selectCountriesData,
   (countries) => {
     if (!countries) return [];
-    const randomNumbers = generateRandomNumArr(4, countries.length);
+    const randomNumbers = generateRandomNumArr(40, countries.length);
     return countries.filter((_, idx: number) => randomNumbers.includes(idx));
-  }
-);
-
-export const selectCurrentCountry = createSelector(
-  selectRandomCountries,
-  (countries) => {
-    if (!countries) return null;
-    const randomNumber = generateRandomNum(3);
-    return countries[randomNumber];
   }
 );

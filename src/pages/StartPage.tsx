@@ -6,7 +6,7 @@ function StartPage() {
   const navigate = useNavigate();
 
   function start() {
-    navigate("/question/1");
+    navigate("/quiz");
   }
 
   return (

@@ -1,21 +1,32 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import usePagination from "../hooks/usePagination";
 
-import { reset as resetQuestions } from "../reducers/questionSlice";
-import { reset as resetScore } from "../reducers/scoreSlice";
+import { ITEMS_PER_PAGE, NB_PAGES } from "../constants";
 import { RootState } from "../store";
+
+import { reset as resetScore, selectScore } from "../reducers/scoreSlice";
+import { selectRandomCountries } from "../services/country";
+import { convertCountryToOption } from "../utils/helpers";
 
 import Button from "../components/Button";
 
 function ResultsPage() {
-  const result = useSelector((state: RootState) => state.score.value);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // dispatch(increment());
-  // dispatch(increment());
+
+  const countries = useSelector((state: RootState) =>
+    selectRandomCountries(state)
+  );
+  const options = countries.map((country) => convertCountryToOption(country));
+
+  const { resetPage } = usePagination(NB_PAGES, ITEMS_PER_PAGE, options);
+
+  const result = useSelector(selectScore);
+
   function restart() {
-    dispatch(resetQuestions());
     dispatch(resetScore());
+    resetPage();
     navigate("/");
   }
 

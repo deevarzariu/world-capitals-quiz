@@ -1,50 +1,40 @@
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import usePagination from "../hooks/usePagination";
 
-import { goForward } from "../reducers/questionSlice";
-import { increment } from "../reducers/scoreSlice";
-import { RootState } from "../store";
-
-import Question from "../components/Question";
+import { increment, selectScore } from "../reducers/scoreSlice";
 import {
-  selectCurrentCountry,
   selectRandomCountries,
   useGetCountriesQuery,
 } from "../services/country";
 import { convertCountryToOption } from "../utils/helpers";
+
+import { RootState } from "../store";
 import { Option } from "../types/Option";
-import { useCallback } from "react";
+import { ITEMS_PER_PAGE, NB_PAGES } from "../constants";
+
+import Question from "../components/Question";
 
 function QuizPage() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { error, isLoading } = useGetCountriesQuery();
 
   const countries = useSelector((state: RootState) =>
     selectRandomCountries(state)
   );
-  const currentCountry = useSelector((state: RootState) =>
-    selectCurrentCountry(state)
-  );
-  const currentQuestion = useSelector(
-    (state: RootState) => state.question.current
-  );
-  const limit = useSelector((state: RootState) => state.question.limit);
+  const options = countries.map((country) => convertCountryToOption(country));
+
+  const { currentPage, currentOptions, currentAnswer, nextPage } =
+    usePagination(NB_PAGES, ITEMS_PER_PAGE, options);
 
   const handleClick = useCallback(
     function (option: Option) {
-      if (option.country === currentCountry?.name.common) {
+      if (option.country === currentAnswer?.country) {
         dispatch(increment());
       }
-
-      dispatch(goForward());
-      if (currentQuestion > limit) {
-        navigate("/results");
-      } else {
-        navigate(`/question/${currentQuestion}`);
-      }
+      nextPage();
     },
-    [currentCountry]
+    [currentAnswer, currentPage]
   );
 
   if (isLoading) {
@@ -55,12 +45,12 @@ function QuizPage() {
     return <div>Error</div>;
   }
 
-  if (countries) {
+  if (options) {
     return (
       <div className="page">
         <Question
-          country={currentCountry?.name.common || ""}
-          options={countries.map((country) => convertCountryToOption(country))}
+          country={currentAnswer?.country || ""}
+          options={currentOptions}
           onClick={handleClick}
         />
       </div>

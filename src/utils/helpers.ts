@@ -1,3 +1,6 @@
+import { Country } from "../types/Country";
+import { Option } from "../types/Option";
+
 export function generateRandomNum(max: number) {
   return Math.floor(Math.random() * max);
 }
@@ -11,4 +14,11 @@ export function generateRandomNumArr(length: number, max: number) {
     }
   }
   return numbers;
+}
+
+export function convertCountryToOption(country: Country): Option {
+  return {
+    country: country.name.common,
+    capital: country.capital,
+  };
 }

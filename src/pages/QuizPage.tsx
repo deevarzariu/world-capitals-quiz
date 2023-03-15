@@ -6,45 +6,46 @@ import { increment } from "../reducers/scoreSlice";
 import { RootState } from "../store";
 
 import Question from "../components/Question";
-import { Country } from "../types/Country";
 import {
   selectCurrentCountry,
   selectRandomCountries,
   useGetCountriesQuery,
 } from "../services/country";
+import { convertCountryToOption } from "../utils/helpers";
+import { Option } from "../types/Option";
+import { useCallback } from "react";
 
 function QuizPage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { error, isLoading } = useGetCountriesQuery();
+
   const countries = useSelector((state: RootState) =>
     selectRandomCountries(state)
   );
   const currentCountry = useSelector((state: RootState) =>
     selectCurrentCountry(state)
   );
-  console.log(currentCountry);
-
-  // const score = useSelector((state: RootState) => state.score.value);
   const currentQuestion = useSelector(
     (state: RootState) => state.question.current
   );
   const limit = useSelector((state: RootState) => state.question.limit);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const handleClick = useCallback(
+    function (option: Option) {
+      if (option.country === currentCountry?.name.common) {
+        dispatch(increment());
+      }
 
-  function handleClick(option: Country) {
-    console.log(option.name.official, currentCountry?.name.official);
-    if (option.name.official === currentCountry?.name.official) {
-      dispatch(increment());
-    }
-
-    dispatch(goForward());
-    if (currentQuestion > limit) {
-      navigate("/results");
-    } else {
-      navigate(`/question/${currentQuestion}`);
-    }
-  }
+      dispatch(goForward());
+      if (currentQuestion > limit) {
+        navigate("/results");
+      } else {
+        navigate(`/question/${currentQuestion}`);
+      }
+    },
+    [currentCountry]
+  );
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -58,8 +59,8 @@ function QuizPage() {
     return (
       <div className="page">
         <Question
-          country={currentCountry?.name.official || ""}
-          options={countries}
+          country={currentCountry?.name.common || ""}
+          options={countries.map((country) => convertCountryToOption(country))}
           onClick={handleClick}
         />
       </div>

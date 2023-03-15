@@ -1,10 +1,10 @@
-import { Country } from "../types/Country";
+import { Option } from "../types/Option";
 import "../assets/styles/Question.css";
 
 type Props = {
   country: string;
-  options: Country[];
-  onClick: (option: Country) => void;
+  options: Option[];
+  onClick: (option: Option) => void;
 };
 
 function Question({ country, options, onClick }: Props) {
@@ -14,7 +14,7 @@ function Question({ country, options, onClick }: Props) {
       <div>
         {options.map((option) => (
           <div
-            key={option.name.official}
+            key={option.country}
             className="question-option"
             onClick={() => onClick(option)}
           >

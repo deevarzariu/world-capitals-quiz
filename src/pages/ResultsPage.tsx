@@ -34,7 +34,7 @@ function ResultsPage() {
   return (
     <div className="page">
       <div className="result-text">
-        Congratulations, you got {score} out of {NB_PAGES} correct.
+        Congratulations, you got {score} out of {NB_PAGES}.
       </div>
       <Button onClick={restart}>Try Again</Button>
     </div>

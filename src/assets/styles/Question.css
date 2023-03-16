@@ -1,12 +1,16 @@
 .question {
   width: 80vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3rem;
   text-align: center;
 }
 
 .question-text {
   font-size: 2rem;
   font-weight: 500;
-  margin-bottom: 3rem;
 }
 
 .question-option {
@@ -20,6 +24,10 @@
   background-color: #afdcfa;
   border: none;
   max-width: 1000px;
+}
+
+.question-option:last-child {
+  margin: 0 auto;
 }
 
 .question-option:hover {
